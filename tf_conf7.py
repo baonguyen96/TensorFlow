@@ -12,7 +12,7 @@ tfe.enable_eager_execution()
 
 mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
 
-dim_hidden = 1024
+dim_hidden = 2048
 
 layer_cnn0 = tf.layers.Conv2D(32, 5, activation=tf.nn.relu)
 layer_pool2x2 = tf.layers.MaxPooling2D(2, 2)
@@ -21,16 +21,15 @@ layer_pool4x4 = tf.layers.MaxPooling2D(4, 4)
 layer_cnn1 = tf.layers.Conv2D(64, 5, activation=tf.nn.relu)
 layer_flatten = tf.layers.Flatten()
 layer_fc0 = tf.layers.Dense(dim_hidden, activation=tf.nn.relu)
-layer_dropout = tf.layers.Dropout(rate=0.75)  # dropout rate is 0.75. Retain 0.25
-layer_fc1 = tf.layers.Dense(10, activation=None)  # 1
+layer_dropout = tf.layers.Dropout(rate=0.8)
+layer_fc1 = tf.layers.Dense(10, activation=None)
 
 
 # forward propagation
 def prediction(X, training):
     values = tf.constant(X)
-    values = layer_pool3x3(values)  # this must be the first layer
+    values = layer_pool4x4(values)  # this must be the first layer
     values = layer_cnn0(values)
-    # values = layer_cnn1(values)
     values = layer_pool2x2(values)
     values = layer_flatten(values)
     values = layer_fc0(values)
@@ -39,8 +38,7 @@ def prediction(X, training):
     return values
 
 
-# cross entropy loss
-def loss(X, y, training):
+def calculate_cross_entropy_loss(X, y, training):
     logits = prediction(X, training)
     loss = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y, logits=logits)
     loss = tf.reduce_mean(loss)
@@ -51,8 +49,8 @@ def binary_accuracy(X, y):
     logits = prediction(X, training=False)
     predict = tf.argmax(logits, 1).numpy()
     target = np.argmax(y, 1)
-    binary_accuracy = np.sum(predict == target) / len(target)
-    return (binary_accuracy)
+    accuracy = np.sum(predict == target) / len(target)
+    return accuracy
 
 
 X_validation = mnist.validation.images
@@ -65,13 +63,18 @@ def v_binary_accuracy():
 
 
 optimizer = tf.train.AdamOptimizer(learning_rate=1e-3)
-batch_size = 50
-iters = 2000
+batch_size = 25
+iters = 4000
+limit = batch_size * iters
+
+if limit > 100000:
+    print("invalid size: {} x {} = {}".format(batch_size, iters, limit))
+    exit(1)
 
 for i in range(iters):
     X, y = mnist.train.next_batch(batch_size)
     X = X.reshape([-1, 28, 28, 1])
-    optimizer.minimize(lambda: loss(X, y, True))
+    optimizer.minimize(lambda: calculate_cross_entropy_loss(X, y, True))
 
     if i % 100 == 0:
         batch_accuracy = binary_accuracy(X, y)

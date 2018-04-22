@@ -1,0 +1,29 @@
+Bao Nguyen
+BCN140030
+CS 4391.001
+
+
+----- Project 3 Documentation -----
+
+
+See full project on GitHub: https://github.com/baonguyen96/TensorFlow
+
+I take the original program and mutate the configurations to
+create new programs. I track each of them via their id and have
+a list of their results. I observe that, with 4x4 maxpool layer as
+the initial layer and the limit of 100000, the test accuracy is
+concerntrated within 0.855 +/- 0.05.
+
+The results is tracked on my GitHub repo, but here is a small list of them:
+
+    File	    Accuracy
+    --------------------
+    tf_conf1	0.8538
+    tf_conf2	0.8503
+    tf_conf3	0.8515
+    tf_conf4	0.8522
+    tf_conf5	0.8576
+    tf_conf6	0.8558
+    tf_conf7	0.8607
+    tf_conf8	0.8589
+    tf_conf9	0.8533
