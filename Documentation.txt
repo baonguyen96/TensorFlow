@@ -27,3 +27,8 @@ The results is tracked on my GitHub repo, but here is a small list of them:
     tf_conf7	0.8607
     tf_conf8	0.8589
     tf_conf9	0.8533
+
+I observe that in general, the more hidden layer the network has, the slower it runs,
+but the more accuracy it gains. And with more iteration, usually it results in better
+accuracy score. The accuracy gains after each iteration looks like a graph of a
+square root function: it shoots up rapidly and slowly diminish (having a more horizontal slope).
