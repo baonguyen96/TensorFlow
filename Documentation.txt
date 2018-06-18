@@ -32,3 +32,4 @@ I observe that in general, the more hidden layer the network has, the slower it 
 but the more accuracy it gains. And with more iteration, usually it results in better
 accuracy score. The accuracy gains after each iteration looks like a graph of a
 square root function: it shoots up rapidly and slowly diminish (having a more horizontal slope).
+Also, if you run the same configuration multiple times in a row, the accuracy score often improves.
